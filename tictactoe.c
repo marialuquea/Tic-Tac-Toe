@@ -4,6 +4,7 @@
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 void print_grid();
+int winner();
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
 
   int player = 1;
   int choice;
+  int result;
   char type;
   char name1[20];
   char name2[20];
@@ -20,7 +22,7 @@ int main()
   printf("\n Enter Player 2's name: ");
   scanf("%s", name2);
 
-  while (player == 1) // CHANGE THIS
+  do
   {
     print_grid(name1, name2);
 
@@ -82,11 +84,24 @@ int main()
         getch();
       }
 
+      result = winner();
       player++;
-
-  }
+  }while (result == 3);
 
   print_grid(name1, name2);
+
+  if (result = 1)
+  {
+    --player;
+    if (player == 1)
+      printf("%s won!\n", name1);
+    else
+      printf("%s won!\n", name2);
+  }
+  else
+    printf("--- DRAW!!! ---");
+
+  getch();
 
   return 0;
 }
@@ -108,4 +123,35 @@ void print_grid(char *name1, char *name2)
   printf("              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[6], numbers[7], numbers[8]);
   printf("              |     |     \n\n\n");
+}
+
+int winner()
+{
+  // 1 show winner
+  // 2 no winner
+  // 3 still playing
+
+  if ((numbers[0] == numbers[1] && numbers[1] == numbers[2])
+        || (numbers[4] == numbers[4] && numbers[4] == numbers[5])
+        || (numbers[6] == numbers[7] && numbers[7] == numbers[8])
+        || (numbers[0] == numbers[4] && numbers[4] == numbers[6])
+        || (numbers[1] == numbers[4] && numbers[4] == numbers[7])
+        || (numbers[2] == numbers[5] && numbers[5] == numbers[8])
+        || (numbers[0] == numbers[4] && numbers[4] == numbers[8])
+        || (numbers[2] == numbers[4] && numbers[4] == numbers[6])
+      )
+      return 1;
+
+  else if (numbers[0] != '1'
+              && numbers[1] != '2'
+              && numbers[2] != '3'
+              && numbers[4] != '4'
+              && numbers[4] != '5'
+              && numbers[5] != '6'
+              && numbers[6] != '7'
+              && numbers[7] != '8'
+              && numbers[8] != '9')
+      return 2; // no one wins
+  else
+      return  3; // still playing
 }
