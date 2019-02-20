@@ -140,7 +140,7 @@ int winner()
         || (numbers[0] == numbers[4] && numbers[4] == numbers[8])
         || (numbers[2] == numbers[4] && numbers[4] == numbers[6])
       )
-      return 1;
+      return 1; // SHOW WINNER
 
   else if (numbers[0] != '1'
               && numbers[1] != '2'
@@ -151,7 +151,7 @@ int winner()
               && numbers[6] != '7'
               && numbers[7] != '8'
               && numbers[8] != '9')
-      return 2; // no one wins
+      return 2; // NO WINNER
   else
-      return  3; // still playing
+      return  3; // STILL PLAYING
 }
