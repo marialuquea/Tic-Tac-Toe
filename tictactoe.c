@@ -131,21 +131,20 @@ int winner()
   // 2 no winner
   // 3 still playing
 
-  if ((numbers[0] == numbers[1] && numbers[1] == numbers[2])
-        || (numbers[4] == numbers[4] && numbers[4] == numbers[5])
-        || (numbers[6] == numbers[7] && numbers[7] == numbers[8])
-        || (numbers[0] == numbers[4] && numbers[4] == numbers[6])
-        || (numbers[1] == numbers[4] && numbers[4] == numbers[7])
-        || (numbers[2] == numbers[5] && numbers[5] == numbers[8])
-        || (numbers[0] == numbers[4] && numbers[4] == numbers[8])
-        || (numbers[2] == numbers[4] && numbers[4] == numbers[6])
-      )
+  if ((numbers[0] == numbers[1] && numbers[1] == numbers[2])      //VERTICAL 1
+        || (numbers[3] == numbers[4] && numbers[4] == numbers[5]) //VERTICAL 2
+        || (numbers[6] == numbers[7] && numbers[7] == numbers[8]) //VERTICAL 3
+        || (numbers[0] == numbers[3] && numbers[3] == numbers[6]) //HORIZONTAL 1
+        || (numbers[1] == numbers[4] && numbers[4] == numbers[7]) //HORIZONTAL 2
+        || (numbers[2] == numbers[5] && numbers[5] == numbers[8]) //HORIZONTAL 3
+        || (numbers[2] == numbers[4] && numbers[4] == numbers[6]) //DIAGONAL /
+        || (numbers[0] == numbers[4] && numbers[4] == numbers[8]) )
       return 1; // SHOW WINNER
 
   else if (numbers[0] != '1'
               && numbers[1] != '2'
               && numbers[2] != '3'
-              && numbers[4] != '4'
+              && numbers[3] != '4'
               && numbers[4] != '5'
               && numbers[5] != '6'
               && numbers[6] != '7'
