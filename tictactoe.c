@@ -6,6 +6,7 @@ char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 void print_grid();
 int winner();
 int check_end();
+void check_movement(int, char);
 
 int main()
 {
@@ -50,11 +51,8 @@ int main()
       if (choice == 1 && numbers[0] == '1')
           numbers[0] = type;
 
-      else if (choice == 2 && numbers[1] == '2'){
+      else if (choice == 2 && numbers[1] == '2')
         numbers[1] = type;
-        printf("type: %c\n", type);
-      }
-
 
       else if (choice == 3 && numbers[2] == '3')
           numbers[2] = type;
@@ -106,6 +104,32 @@ int main()
   getch();
 
   return 0;
+}
+
+
+
+/*
+else if (choice == 9 && numbers[8] == '9')
+    numbers[8] = type;
+
+1 - 049
+2 - 050
+3 - 051
+4 - 052
+9 - 057
+
+https://ee.hawaii.edu/~tep/EE160/Book/chap4/subsection2.1.1.1.html
+https://www.quora.com/How-can-I-compare-int-to-char-in-C
+https://www.programiz.com/c-programming/examples/alphabet
+*/
+
+void check_movement(int choice, char type)
+{
+  for (int i = 0; i < 10; i++)
+  {
+    if ((choice + 48) == numbers[i-1])
+      numbers[i-1] = type;
+  }
 }
 
 void print_grid(char *name1, char *name2)
