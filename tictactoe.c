@@ -5,6 +5,7 @@ char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 void print_grid();
 int winner();
+int check_end();
 
 int main()
 {
@@ -38,8 +39,8 @@ int main()
     }
 
     scanf("%d", &choice);
-    printf("\nChoice: %d\n", choice);
-    printf("numbers[1]: %d\n", numbers[1]);
+    // printf("\nChoice: %d\n", choice);
+    // printf("numbers[1]: %d\n", numbers[1]);
 
     if (player == 1)
       type = 'X';
@@ -85,12 +86,13 @@ int main()
       }
 
       result = winner();
+      printf("RESULT: %d\n", result);
       player++;
   }while (result == 3);
 
   print_grid(name1, name2);
 
-  if (result = 1)
+  if (result == 1)
   {
     --player;
     if (player == 1)
@@ -108,7 +110,7 @@ int main()
 
 void print_grid(char *name1, char *name2)
 {
-  system("cls");
+  //system("cls");
 
   printf("\n\n ---- Maria Style Tic Tac Toe ----\n\n");
 
@@ -141,16 +143,20 @@ int winner()
         || (numbers[0] == numbers[4] && numbers[4] == numbers[8]) )
       return 1; // SHOW WINNER
 
-  else if (numbers[0] != '1'
-              && numbers[1] != '2'
-              && numbers[2] != '3'
-              && numbers[3] != '4'
-              && numbers[4] != '5'
-              && numbers[5] != '6'
-              && numbers[6] != '7'
-              && numbers[7] != '8'
-              && numbers[8] != '9')
-      return 2; // NO WINNER
+  else if (check_end() == 1){
+    return 2; // NO WINNER
+  }
+
   else
       return  3; // STILL PLAYING
+}
+
+int check_end()
+{
+  for (int i=0; i<9; i++)
+  {
+    if ((numbers[i] != 'X') && (numbers[i] != 'O'))
+      return 0;
+  }
+  return 1;
 }
