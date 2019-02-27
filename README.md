@@ -14,6 +14,14 @@ $ cl tictactoe.c
 $ tictactoe
 ```
 
+To run in Mac / Linux:
+
+```
+$ gcc -o -lcurses tictactoe tictactoe.c
+
+$ ./tictactoe
+```
+
 TO DO:
 
 - [ ] Record the history of play
