@@ -14,7 +14,7 @@ $ cl tictactoe.c
 $ tictactoe
 ```
 
-To run in Mac / Linux:
+in Mac / Linux:
 
 ```
 $ gcc -o -lcurses tictactoe tictactoe.c
