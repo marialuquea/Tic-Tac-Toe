@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include <conio.h>
+// #include <conio.h>
+#include <curses.h>
+
+#define getch() wgetch(stdscr)
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
@@ -10,7 +13,9 @@ void check_movement(int, char);
 
 int main()
 {
-  system("cls");
+  // system("cls");
+  // system("clear");
+  // clear();
 
   int player = 1;
   int choice;
