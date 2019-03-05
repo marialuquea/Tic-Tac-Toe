@@ -73,18 +73,18 @@ int main()
     else
       type = 'O';
 
-    check_movement(choice, type);
+    //check_movement(choice, type);
+    //printf("\n\n-----FIRST CHECK MOVEMENT DONE-----\n\n");
 
     if (check_movement(choice, type) == 0)
     {
       printf("Nah bitch, try again\n");
-
       player--;
       getch();
     }
 
     result = winner();
-    printf("RESULT: %d\n", result);
+    //printf("RESULT: %d\n", result);
     player++;
   }while (result == 3);
 
@@ -125,12 +125,9 @@ https://www.programiz.com/c-programming/examples/alphabet
 
 int check_movement(int choice, char type)
 {
+
   for (int i = 1; i < 10; i++)
   {
-    printf("\ni: %d\n", i);
-    printf("choice: %d\n", (choice + 48));
-    printf("numbers[i-1]: %d\n\n", (numbers[i-1]));
-
     if ((choice + 48) == (int)numbers[i-1])
     {
       numbers[i-1] = type;
