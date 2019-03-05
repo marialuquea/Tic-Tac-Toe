@@ -107,27 +107,24 @@ int main()
 }
 
 
-
-/*
-else if (choice == 9 && numbers[8] == '9')
-    numbers[8] = type;
-
-1 - 049
-2 - 050
-3 - 051
-4 - 052
-9 - 057
-
-https://ee.hawaii.edu/~tep/EE160/Book/chap4/subsection2.1.1.1.html
-https://www.quora.com/How-can-I-compare-int-to-char-in-C
-https://www.programiz.com/c-programming/examples/alphabet
-*/
-
 int check_movement(int choice, char type)
 {
-
   for (int i = 1; i < 10; i++)
   {
+    /*
+      choice is an int and numbers is a list of chars so
+      when converting a char to int it will give the ASCII
+      value, therefore i need to add 48 to choide to get
+      the ASCII value of the choice
+      1 - 049
+      2 - 050
+      3 - 051
+      4 - 052
+      9 - 057
+      https://ee.hawaii.edu/~tep/EE160/Book/chap4/subsection2.1.1.1.html
+      https://www.quora.com/How-can-I-compare-int-to-char-in-C
+      https://www.programiz.com/c-programming/examples/alphabet
+    */
     if ((choice + 48) == (int)numbers[i-1])
     {
       numbers[i-1] = type;
