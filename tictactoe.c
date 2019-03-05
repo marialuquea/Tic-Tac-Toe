@@ -12,11 +12,14 @@ struct node
 };
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+struct node *moves;
 
 void print_grid();
 int winner();
 int check_end();
 int check_movement(int, char);
+
+unsigned concatenate(unsigned, unsigned);
 
 int count(struct node *);
 void display(struct node *);
@@ -31,7 +34,7 @@ int main()
   // system("clear");
   // clear();
 
-  struct node *moves;
+
   moves = NULL;
   printf("No of elements in list = %d\n", count(moves));
 
@@ -124,10 +127,27 @@ int check_movement(int choice, char type)
     if ((choice + 48) == (int)numbers[i-1])
     {
       numbers[i-1] = type;
+      /*
+         51 means 5 for choice and 1 for X
+         1 for X
+         2 for O
+         3 for - not played yet
+      */
+      int moves_number = concatenate(choice, 1);
+      printf("moves_number: %d\n", moves_number);
+      append(&list, moves_number);
+      //display(list);
       return 1;
     }
   }
   return 0;
+}
+
+unsigned concatenate(unsigned x, unsigned y) {
+    unsigned pow = 10;
+    while(y >= pow)
+        pow *= 10;
+    return x * pow + y;
 }
 
 void print_grid(char *name1, char *name2)
