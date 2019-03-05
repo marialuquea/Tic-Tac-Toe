@@ -1,21 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
 // #include <conio.h>
-#include <curses.h>
+//#include <curses.h>
 
-#define getch() wgetch(stdscr)
+//#define getch() wgetch(stdscr)
+
+struct node
+{
+  int data;
+  struct node *link;
+};
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 void print_grid();
 int winner();
 int check_end();
-void check_movement(int, char);
+int check_movement(int, char);
+
+int count(struct node *);
+void display(struct node *);
+void append(struct node **, int);
+void prepend(struct node **, int);
+void insert_after(struct node *, int, int);
+void delete_value(struct node **, int);
 
 int main()
 {
-  // system("cls");
+  system("cls");
   // system("clear");
   // clear();
+
+  struct node *moves;
+  moves = NULL;
+  printf("No of elements in list = %d\n", count(moves));
 
   int player = 1;
   int choice;
@@ -33,7 +51,9 @@ int main()
   {
     print_grid(name1, name2);
 
-    if (player = (player % 2))
+    player = player % 2;
+
+    if (player == 1)
     {
       player = 1;
       printf("%s choose your next move: ", name1);
@@ -53,44 +73,19 @@ int main()
     else
       type = 'O';
 
-      if (choice == 1 && numbers[0] == '1')
-          numbers[0] = type;
+    check_movement(choice, type);
 
-      else if (choice == 2 && numbers[1] == '2')
-        numbers[1] = type;
+    if (check_movement(choice, type) == 0)
+    {
+      printf("Nah bitch, try again\n");
 
-      else if (choice == 3 && numbers[2] == '3')
-          numbers[2] = type;
+      player--;
+      getch();
+    }
 
-      else if (choice == 4 && numbers[3] == '4')
-          numbers[3] = type;
-
-      else if (choice == 5 && numbers[4] == '5')
-          numbers[4] = type;
-
-      else if (choice == 6 && numbers[5] == '6')
-          numbers[5] = type;
-
-      else if (choice == 7 && numbers[6] == '7')
-          numbers[6] = type;
-
-      else if (choice == 8 && numbers[7] == '8')
-          numbers[7] = type;
-
-      else if (choice == 9 && numbers[8] == '9')
-          numbers[8] = type;
-
-      else
-      {
-        printf("Nah bitch, try again\n");
-
-        player--;
-        getch();
-      }
-
-      result = winner();
-      printf("RESULT: %d\n", result);
-      player++;
+    result = winner();
+    printf("RESULT: %d\n", result);
+    player++;
   }while (result == 3);
 
   print_grid(name1, name2);
@@ -128,13 +123,21 @@ https://www.quora.com/How-can-I-compare-int-to-char-in-C
 https://www.programiz.com/c-programming/examples/alphabet
 */
 
-void check_movement(int choice, char type)
+int check_movement(int choice, char type)
 {
-  for (int i = 0; i < 10; i++)
+  for (int i = 1; i < 10; i++)
   {
-    if ((choice + 48) == numbers[i-1])
+    printf("\ni: %d\n", i);
+    printf("choice: %d\n", (choice + 48));
+    printf("numbers[i-1]: %d\n\n", (numbers[i-1]));
+
+    if ((choice + 48) == (int)numbers[i-1])
+    {
       numbers[i-1] = type;
+      return 1;
+    }
   }
+  return 0;
 }
 
 void print_grid(char *name1, char *name2)
@@ -188,4 +191,114 @@ int check_end()
       return 0;
   }
   return 1;
+}
+
+int count(struct node * list)
+{
+  int count = 0;
+  // check if it's not empty
+  // the end of the list is indicated by NULL in both:
+  //    the end of a list
+  //    an empty list
+  while (list != NULL)
+  {
+    // traversing the list to process each node
+    list = list -> link;
+    count++;
+  }
+  return count;
+}
+
+void display(struct node * list)
+{
+  while (list != NULL)
+  {
+    printf("%d ", list -> data);
+    list = list -> link;
+  }
+  printf("\n");
+}
+
+void append(struct node **list, int num)
+{
+
+  struct node *temp, *r;
+
+  if(*list == NULL)
+  {
+    temp = (struct node *) malloc (sizeof(struct node));
+    temp -> data = num;
+    temp -> link = NULL;
+    *list = temp;
+  }
+  else
+  {
+    temp = *list;
+    while (temp -> link != NULL)
+      temp = temp -> link;
+
+    r = (struct node *) malloc(sizeof(struct node));
+    r -> data = num;
+    r -> link = NULL;
+    temp -> link = r;
+  }
+}
+
+void prepend(struct node **list, int num)
+{
+  struct node *temp;
+  temp = (struct node *) malloc(sizeof(struct node));
+  temp -> data = num;
+  temp -> link = *list;
+  *list = temp;
+}
+
+void insert_after(struct node *list, int location, int num)
+{
+  struct node *temp, *r;
+  int i;
+  temp = list;
+  for(i=0; i<location; i++)
+  {
+    temp = temp -> link;
+    if (temp == NULL)
+    {
+      printf("Length of list is %d but supplied location is %d\n", i, location);
+      return;
+    }
+  }
+  r = (struct node *)malloc(sizeof(struct node));
+  r -> data = num;
+  r -> link = temp -> link;
+  temp -> link = r;
+}
+
+void delete_value(struct node **list, int num)
+{
+  struct node *old, *temp;
+  temp = *list;
+
+  while(temp != NULL)
+  {
+    if (temp -> data == num)
+    {
+      if (temp == *list) // if it's the head of the list
+      {
+        printf("----DELETING THE HEAD----\n");
+        *list = temp -> link;
+      }
+      else // if it's not the first node
+      {
+        old -> link = temp -> link;
+        free(temp);
+        return;
+      }
+    }
+    else // next node bc it's not the 1 we want
+    {
+      old = temp;
+      temp = temp -> link;
+    }
+  }
+  printf("Element %d not found in supplied list\n", num);
 }
