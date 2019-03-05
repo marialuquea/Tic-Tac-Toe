@@ -65,17 +65,13 @@ int main()
     }
 
     scanf("%d", &choice);
-    // printf("\nChoice: %d\n", choice);
-    // printf("numbers[1]: %d\n", numbers[1]);
 
     if (player == 1)
       type = 'X';
     else
       type = 'O';
 
-    //check_movement(choice, type);
-    //printf("\n\n-----FIRST CHECK MOVEMENT DONE-----\n\n");
-
+    // if movement is unvalid
     if (check_movement(choice, type) == 0)
     {
       printf("Nah bitch, try again\n");
@@ -106,7 +102,7 @@ int main()
   return 0;
 }
 
-
+// check if movement is valid
 int check_movement(int choice, char type)
 {
   for (int i = 1; i < 10; i++)
