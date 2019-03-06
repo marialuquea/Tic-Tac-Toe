@@ -181,7 +181,7 @@ int main()
       printf("\n    %s won!\n", name2);
   }
   else
-    printf("\n    --- DRAW!!! ---");
+    printf("\n    --- DRAW!!! ---\n\n");
 
   getch();
 
@@ -226,13 +226,10 @@ void print_grid(char *name1, char *name2)
 
   printf("\n\n\n              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
-  printf("         _____|_____|_____            X: %s\n", name1);
-  printf("              |     |     \n");
+  printf("         _____|_____|_____            X: %s\n              |     |     \n", name1);
   printf("           %c  |  %c  |  %c \n", numbers[3], numbers[4], numbers[5]);
-  printf("         _____|_____|_____            X: %s\n", name2);
-  printf("              |     |     \n");
-  printf("           %c  |  %c  |  %c \n", numbers[6], numbers[7], numbers[8]);
-  printf("              |     |     \n\n\n");
+  printf("         _____|_____|_____            O: %s\n              |     |     \n", name2);
+  printf("           %c  |  %c  |  %c \n              |     |     \n\n\n", numbers[6], numbers[7], numbers[8]);
 }
 
 int winner()
