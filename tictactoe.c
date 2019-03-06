@@ -28,20 +28,20 @@ int main()
   system("cls");
 
   struct stack first; // where all moves will go
-  struct stack second; // where moves will go if player decis to undo
+  struct stack second; // where moves will go if player decides to undo
   init_stack(&first);
   init_stack(&second);
 
-  int player = 1;
-  int choice;
-  int result;
-  int *move = NULL; // to pop from stack
-  int last_move;
-  char type;
-  char name1[20];
-  char name2[20] = "Computer";
+  int player = 1; // 1 or 2
+  int choice; // the next move
+  int result; // game over or still playing
+  int *move = NULL; // to pop from stacks
+  char type; // X or O
+  char name1[20]; // player 1
+  char name2[20] = "Computer"; // player 2 or computer
 
-  int computer_game;
+  int computer_game; // multiplayer or against the computer
+  printf("\n\n ***********************\n *     TIC TAC TOE     *\n *                     *\n *      by Maria       *\n *      SET08122       *\n ***********************\n");
   printf("\nChoose number of players:\n\n- 1 to play agains the computer\n- 2 players 1v1\n\nType 1 or 2:\n\n");
   scanf("%d", &computer_game);
 
@@ -62,7 +62,7 @@ int main()
     if (player == 1) // print name and options
     {
       player = 1;
-      printf("%s choose a number your next move, 10 for undo or 20 for redo: \n", name1);
+      printf(" %s choose a number for your next move / 10 for undo / 20 for redo: \n", name1);
       scanf("%d", &choice);
     }
     else
@@ -70,12 +70,11 @@ int main()
       player = 2;
       if (strcmp(name2, "Computer") != 0) // if 2 players
       {
-        printf("%s choose a number your next move, 10 for undo or 20 for redo: \n", name2);
+        printf("%s choose a number for your next move, 10 for undo or 20 for redo: \n", name2);
         scanf("%d", &choice);
       }
       else // if 1 player vs computer
       {
-        //int randomnumber = rand() % 10;
         for (int a=1; a<10; a++)
         {
           if ((numbers[a-1] != 'X') && (numbers[a-1]) != 'O')
@@ -92,6 +91,13 @@ int main()
     else //player 2
       type = 'O';
 
+    /*
+      OPTIONS:
+        - play a valid move
+        - the move is invalid
+        - undo
+        - redo
+    */
     if (choice == 10) // UNDO - pop item from first and push into second
     {
       move = pop(&first); // pop from first
@@ -105,24 +111,18 @@ int main()
 
         if (move)
         {
-          last_move = *move;
-          printf("Last move: %d\n", last_move); //31
-
           // from X or O to 3
-          numbers[last_move-1] = last_move + '0';
+          numbers[*move-1] = *move + '0';
           print_grid(name1, name2);
-
-          // push it back to second
-          push(&second, *move);
+          push(&second, *move); // push it back to second
         }
       }
     }
-    if (choice == 20) // REDO
+    else if (choice == 20) // REDO
     {
       move = pop(&second); // pop from first
       if (move)
       {
-        printf("Item popped from second: %d\n", *move);
         push(&first, *move); // push into second
 
         // set grid as top in first - pop second, change first X or O for first number, push it back to second
@@ -130,26 +130,22 @@ int main()
 
         if (move)
         {
-          last_move = *move;
-          printf("Last move: %d\n", last_move);
+          printf("Last move: %d\n", *move);
 
           // get first digit of last_move to find what space to change
-          while(last_move >= 10)
-            last_move = last_move / 10;
+          while(*move >= 10)
+            *move = *move / 10;
 
           // from 3 to X or O
-          numbers[last_move-1] = type;
+          numbers[*move-1] = type;
           print_grid(name1, name2);
 
-          // push it back to first
-          push(&first, *move);
-          printf("Pushed back to first: %d\n", *move);
+          push(&first, *move); // push it back to first
         }
       }
     }
-
     // INVALID MOVEMENT
-    if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
+    else if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
     {
       printf("Nah bitch, try again\n");
       player--;
@@ -167,7 +163,6 @@ int main()
       {
         int moves_number = choice;
         push(&first, moves_number); // push to first - add move to stack
-        //printf("Pushed to first: %d\n", moves_number);
       }
     }
 
@@ -181,12 +176,12 @@ int main()
   {
     --player;
     if (player == 1)
-      printf("%s won!\n", name1);
+      printf("\n    %s won!\n", name1);
     else
-      printf("%s won!\n", name2);
+      printf("\n    %s won!\n", name2);
   }
   else
-    printf("--- DRAW!!! ---");
+    printf("\n    --- DRAW!!! ---");
 
   getch();
 
@@ -229,16 +224,12 @@ void print_grid(char *name1, char *name2)
 {
   system("cls");
 
-  printf("\n\n ---- Maria Style Tic Tac Toe ----\n\n");
-
-  printf("   X: %s         O: %s\n\n\n", name1, name2);
-
-  printf("              |     |     \n");
+  printf("\n\n\n              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
-  printf("         _____|_____|_____\n");
+  printf("         _____|_____|_____            X: %s\n", name1);
   printf("              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[3], numbers[4], numbers[5]);
-  printf("         _____|_____|_____\n");
+  printf("         _____|_____|_____            X: %s\n", name2);
   printf("              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[6], numbers[7], numbers[8]);
   printf("              |     |     \n\n\n");
