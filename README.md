@@ -27,5 +27,5 @@ TO DO:
 - [X] Record the history of play
 - [X] Undo movement
 - [X] Redo movement
-- [ ] Computer playing
+- [X] Computer playing
 - [ ] Report
