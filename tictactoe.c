@@ -40,6 +40,7 @@ int main()
   int choice;
   int result;
   int *move = NULL; // to pop from stack
+  int last_move;
   int player_move;
   char type;
   char name1[20];
@@ -56,20 +57,20 @@ int main()
 
     player = player % 2;
 
-    if (player == 1)
+    if (player == 1) // print name and options
     {
       player = 1;
-      printf("%s choose your next move: ", name1);
+      printf("%s choose a number your next move, 10 for undo or 20 for redo: ", name1);
     }
     else
     {
       player = 2;
-      printf("%s choose your next move: ", name2);
+      printf("%s choose a number your next move, 10 for undo or 20 for redo: ", name2);
     }
 
     scanf("%d", &choice);
 
-    if (player == 1)
+    if (player == 1) // set X or O
     {
       type = 'X';
       player_move = 1;
@@ -80,8 +81,45 @@ int main()
       player_move = 2;
     }
 
+    if (choice == 10) // undo - pop item from first and push into second
+    {
+      move = pop(&first); // pop from first
+      if (move)
+      {
+        printf("Item popped from first: %d\n", *move);
+        push(&second, *move); // push into second
+
+        // set grid as top in first - pop second, change first X or O for first number, push it back to second
+        move = pop(&second);
+
+        if (move)
+        {
+          last_move = *move;
+          printf("Last move: %d\n", last_move); //31
+
+          // get first digit of last_move to find what space to change
+          while(last_move >= 10)
+            last_move = last_move / 10;
+
+          // from X or O to 3
+          printf("numbers[last_move-1]: %c\n", numbers[last_move-1]); // this is a char
+          printf("last_move: %d\n", last_move);
+          numbers[last_move-1] = last_move + '0';
+          print_grid(name1, name2);
+
+          printf("*move: %d\n", *move);
+          push(&second, *move);
+          printf("Pushed to second: %d\n", *move);
+        }
+      }
+    }
+    if (choice == 20) // redo
+    {
+      printf("You chose the redo option.\n");
+    }
+
     // if movement is unvalid
-    if (check_movement(choice, type) == 0)
+    if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
     {
       printf("Nah bitch, try again\n");
       player--;
@@ -95,19 +133,15 @@ int main()
          2 for O (player 2)
          3 for - not played yet
       */
-      int moves_number = concatenate(choice, player_move);
-      // add move to stack
-      push(&first, moves_number);
-
-      /*----TO REMOVE FROM FIRST STACK----
-      move = pop(&first); // first stack
-      if (move) { printf("Item popped from second: %d\n", *move); }
-      */
+      if ((choice != 10)&&(choice != 20))
+      {
+        int moves_number = concatenate(choice, player_move);
+        push(&first, moves_number); // push to first - add move to stack
+        printf("Pushed to first: %d\n", moves_number);
+      }
     }
 
-
     result = winner();
-    //printf("RESULT: %d\n", result);
     player++;
   }while (result == 3);
 
@@ -129,7 +163,10 @@ int main()
   return 0;
 }
 
-// check if movement is valid
+/*
+  check if movement is valid
+  return 0 for invalid, 1 for valid, 2 for undo, 3 for redo
+*/
 int check_movement(int choice, char type)
 {
   // for the numbers in the grid
@@ -152,13 +189,10 @@ int check_movement(int choice, char type)
     if ((choice + 48) == (int)numbers[i-1])
     {
       numbers[i-1] = type;
-      return 1;
+      return 1; // valid
     }
   }
-
-  if ()
-
-  return 0;
+  return 0; // invalid
 }
 
 unsigned concatenate(unsigned x, unsigned y)
@@ -222,15 +256,19 @@ int check_end()
   return 1;
 }
 
-// accessing the variable that points to the top of the Stack
-// setting it to -1 to indicate that the stack is empty
+/*
+  accessing the variable that points to the top of the Stack
+  setting it to -1 to indicate that the stack is empty
+*/
 void init_stack(struct stack *s)
 {
   s->top = -1;
 }
 
-// check the position of the variable that indicates the top
-// of the stack
+/*
+  check the position of the variable that indicates the top
+  of the stack
+  */
 void push(struct stack *s, int item)
 {
   // if top = max size, taking into account zero indexing
@@ -256,7 +294,7 @@ int *pop(struct stack *s)
   if (s->top == -1)
   {
     // stack is empty and there is nothing to pop
-    printf("Stack is empty\n");
+    printf("There are no moves to undo.\n");
     // if pop() == NULL then stack is empty
     return NULL;
   }
