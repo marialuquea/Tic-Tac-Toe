@@ -81,7 +81,6 @@ int main()
       player--;
       getch();
     }
-    /*
     else
     {
       /*
@@ -89,13 +88,14 @@ int main()
          1 for X
          2 for O
          3 for - not played yet
-      ----/
+      */
       int moves_number = concatenate(choice, 1);
       printf("moves_number: %d\n", moves_number);
       append(&moves, moves_number);
-      //display(list);
+      printf("\nList:\n");
+      display(moves);
     }
-    */
+
 
     result = winner();
     //printf("RESULT: %d\n", result);
