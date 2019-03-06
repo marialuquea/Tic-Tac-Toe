@@ -33,14 +33,8 @@ int main()
 
   struct stack first; // where all moves will go
   struct stack second; // where moves will go if player decis to undo
-
   init_stack(&first);
   init_stack(&second);
-
-  // temporary
-  push(&second, 12);
-  push(&second, 32);
-
 
   int player = 1;
   int choice;
@@ -102,25 +96,13 @@ int main()
          3 for - not played yet
       */
       int moves_number = concatenate(choice, player_move);
-      /*
-      FOR LINKED LIST
-      append(&moves, moves_number);
-      printf("\nList:\n");
-      display(moves);
-      */
+      // add move to stack
       push(&first, moves_number);
 
-      move = pop(&second);
-      if (move) { printf("Item popped from second: %d\n", *move); }
-
-      move = pop(&second);
-      if (move) { printf("Item popped from second: %d\n", *move); }
-
-      move = pop(&second); // STACK IS EMPTY
-      if (move) { printf("Item popped from second: %d\n", *move); }
-
+      /*----TO REMOVE FROM FIRST STACK----
       move = pop(&first); // first stack
       if (move) { printf("Item popped from second: %d\n", *move); }
+      */
     }
 
 
@@ -173,6 +155,9 @@ int check_movement(int choice, char type)
       return 1;
     }
   }
+
+  if ()
+
   return 0;
 }
 
