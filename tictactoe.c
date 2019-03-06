@@ -77,7 +77,7 @@ int main()
       {
         for (int a=1; a<10; a++)
         {
-          if ((numbers[a-1] != 'X') && (numbers[a-1]) != 'O')
+          if ((numbers[a-1] != 'X') && (numbers[a-1]) != 'O'))
           {
             choice = a;
             break;
