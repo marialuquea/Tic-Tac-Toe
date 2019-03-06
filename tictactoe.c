@@ -41,6 +41,7 @@ int main()
   int player = 1;
   int choice;
   int result;
+  int player_move;
   char type;
   char name1[20];
   char name2[20];
@@ -70,9 +71,15 @@ int main()
     scanf("%d", &choice);
 
     if (player == 1)
+    {
       type = 'X';
-    else
+      player_move = 1;
+    }
+    else //player 2
+    {
       type = 'O';
+      player_move = 2;
+    }
 
     // if movement is unvalid
     if (check_movement(choice, type) == 0)
@@ -81,15 +88,18 @@ int main()
       player--;
       getch();
     }
-    else
+    else // add movement to history of moves
     {
       /*
          51 means 5 for choice and 1 for X
-         1 for X
-         2 for O
+         1 for X (player 1)
+         2 for O (player 2)
          3 for - not played yet
       */
-      int moves_number = concatenate(choice, 1);
+      printf("Player move: %d\n", player_move);
+
+      int moves_number = concatenate(choice, player_move);
+      
       printf("moves_number: %d\n", moves_number);
       append(&moves, moves_number);
       printf("\nList:\n");
