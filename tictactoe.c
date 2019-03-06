@@ -81,7 +81,7 @@ int main()
       player_move = 2;
     }
 
-    if (choice == 10) // undo - pop item from first and push into second
+    if (choice == 10) // UNDO - pop item from first and push into second
     {
       move = pop(&first); // pop from first
       if (move)
@@ -102,30 +102,27 @@ int main()
             last_move = last_move / 10;
 
           // from X or O to 3
-          printf("numbers[last_move-1]: %c\n", numbers[last_move-1]); // this is a char
-          printf("last_move: %d\n", last_move);
           numbers[last_move-1] = last_move + '0';
           print_grid(name1, name2);
 
-          printf("*move: %d\n", *move);
+          // push it back to second
           push(&second, *move);
-          printf("Pushed to second: %d\n", *move);
         }
       }
     }
-    if (choice == 20) // redo
+    if (choice == 20) // REDO
     {
       printf("You chose the redo option.\n");
     }
 
-    // if movement is unvalid
+    // INVALID MOVEMENT
     if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
     {
       printf("Nah bitch, try again\n");
       player--;
       getch();
     }
-    else // add movement to history of moves
+    else // VALID MOVEMENT - add movement to history of moves
     {
       /*
          51 means 5 for choice and 1 for X
