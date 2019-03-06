@@ -4,15 +4,15 @@
 //#include <curses.h>
 
 //#define getch() wgetch(stdscr)
+#define MAX 30
 
-struct node
+struct stack
 {
-  int data;
-  struct node *link;
+  int array[MAX]; // study this
+  int top;
 };
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
-struct node *moves;
 
 void print_grid();
 int winner();
@@ -21,12 +21,9 @@ int check_movement(int, char);
 
 unsigned concatenate(unsigned, unsigned);
 
-int count(struct node *);
-void display(struct node *);
-void append(struct node **, int);
-void prepend(struct node **, int);
-void insert_after(struct node *, int, int);
-void delete_value(struct node **, int);
+void init_stack(struct stack *);
+void push(struct stack*, int);
+int *pop(struct stack *);
 
 int main()
 {
@@ -34,13 +31,21 @@ int main()
   // system("clear");
   // clear();
 
+  struct stack first; // where all moves will go
+  struct stack second; // where moves will go if player decis to undo
 
-  moves = NULL;
-  printf("No of elements in list = %d\n", count(moves));
+  init_stack(&first);
+  init_stack(&second);
+
+  // temporary
+  push(&second, 12);
+  push(&second, 32);
+
 
   int player = 1;
   int choice;
   int result;
+  int *move = NULL; // to pop from stack
   int player_move;
   char type;
   char name1[20];
@@ -97,10 +102,25 @@ int main()
          3 for - not played yet
       */
       int moves_number = concatenate(choice, player_move);
+      /*
+      FOR LINKED LIST
       append(&moves, moves_number);
-
       printf("\nList:\n");
       display(moves);
+      */
+      push(&first, moves_number);
+
+      move = pop(&second);
+      if (move) { printf("Item popped from second: %d\n", *move); }
+
+      move = pop(&second);
+      if (move) { printf("Item popped from second: %d\n", *move); }
+
+      move = pop(&second); // STACK IS EMPTY
+      if (move) { printf("Item popped from second: %d\n", *move); }
+
+      move = pop(&first); // first stack
+      if (move) { printf("Item popped from second: %d\n", *move); }
     }
 
 
@@ -156,7 +176,8 @@ int check_movement(int choice, char type)
   return 0;
 }
 
-unsigned concatenate(unsigned x, unsigned y) {
+unsigned concatenate(unsigned x, unsigned y)
+{
     unsigned pow = 10;
     while(y >= pow)
         pow *= 10;
@@ -216,112 +237,49 @@ int check_end()
   return 1;
 }
 
-int count(struct node * list)
+// accessing the variable that points to the top of the Stack
+// setting it to -1 to indicate that the stack is empty
+void init_stack(struct stack *s)
 {
-  int count = 0;
-  // check if it's not empty
-  // the end of the list is indicated by NULL in both:
-  //    the end of a list
-  //    an empty list
-  while (list != NULL)
-  {
-    // traversing the list to process each node
-    list = list -> link;
-    count++;
-  }
-  return count;
+  s->top = -1;
 }
 
-void display(struct node * list)
+// check the position of the variable that indicates the top
+// of the stack
+void push(struct stack *s, int item)
 {
-  while (list != NULL)
+  // if top = max size, taking into account zero indexing
+  if(s->top == MAX-1)
   {
-    printf("%d ", list -> data);
-    list = list -> link;
+    // then stack is full
+    printf("Stack is full. Couldn't push '%d' onto stack\n", item);
+    return;
   }
-  printf("\n");
+  // otherwise we alter where the variable pointing to top points to
+  s->top++;
+  // then place the item into the stack
+  s->array[s->top] = item;
 }
 
-void append(struct node **list, int num)
+int *pop(struct stack *s)
 {
+  // temprary storage for item to pop
+  int *data;
 
-  struct node *temp, *r;
-
-  if(*list == NULL)
+  // check position of top indicator variable
+  // if it points to the bottom of the array...
+  if (s->top == -1)
   {
-    temp = (struct node *) malloc (sizeof(struct node));
-    temp -> data = num;
-    temp -> link = NULL;
-    *list = temp;
+    // stack is empty and there is nothing to pop
+    printf("Stack is empty\n");
+    // if pop() == NULL then stack is empty
+    return NULL;
   }
-  else
-  {
-    temp = *list;
-    while (temp -> link != NULL)
-      temp = temp -> link;
+  // access the value stored in the current location
+  data = &s->array[s->top];
+  // alter top pointer to point to the item below the current item
+  // so that next time pop is called it will retrieve the next item
+  s->top--;
 
-    r = (struct node *) malloc(sizeof(struct node));
-    r -> data = num;
-    r -> link = NULL;
-    temp -> link = r;
-  }
-}
-
-void prepend(struct node **list, int num)
-{
-  struct node *temp;
-  temp = (struct node *) malloc(sizeof(struct node));
-  temp -> data = num;
-  temp -> link = *list;
-  *list = temp;
-}
-
-void insert_after(struct node *list, int location, int num)
-{
-  struct node *temp, *r;
-  int i;
-  temp = list;
-  for(i=0; i<location; i++)
-  {
-    temp = temp -> link;
-    if (temp == NULL)
-    {
-      printf("Length of list is %d but supplied location is %d\n", i, location);
-      return;
-    }
-  }
-  r = (struct node *)malloc(sizeof(struct node));
-  r -> data = num;
-  r -> link = temp -> link;
-  temp -> link = r;
-}
-
-void delete_value(struct node **list, int num)
-{
-  struct node *old, *temp;
-  temp = *list;
-
-  while(temp != NULL)
-  {
-    if (temp -> data == num)
-    {
-      if (temp == *list) // if it's the head of the list
-      {
-        printf("----DELETING THE HEAD----\n");
-        *list = temp -> link;
-      }
-      else // if it's not the first node
-      {
-        old -> link = temp -> link;
-        free(temp);
-        return;
-      }
-    }
-    else // next node bc it's not the 1 we want
-    {
-      old = temp;
-      temp = temp -> link;
-    }
-  }
-  printf("Element %d not found in supplied list\n", num);
+  return data;
 }
