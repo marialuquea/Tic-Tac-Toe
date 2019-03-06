@@ -96,12 +96,9 @@ int main()
          2 for O (player 2)
          3 for - not played yet
       */
-      printf("Player move: %d\n", player_move);
-
       int moves_number = concatenate(choice, player_move);
-      
-      printf("moves_number: %d\n", moves_number);
       append(&moves, moves_number);
+
       printf("\nList:\n");
       display(moves);
     }
@@ -133,6 +130,7 @@ int main()
 // check if movement is valid
 int check_movement(int choice, char type)
 {
+  // for the numbers in the grid
   for (int i = 1; i < 10; i++)
   {
     /*
