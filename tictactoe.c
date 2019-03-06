@@ -112,7 +112,33 @@ int main()
     }
     if (choice == 20) // REDO
     {
-      printf("You chose the redo option.\n");
+      move = pop(&second); // pop from first
+      if (move)
+      {
+        printf("Item popped from second: %d\n", *move);
+        push(&first, *move); // push into second
+
+        // set grid as top in first - pop second, change first X or O for first number, push it back to second
+        move = pop(&first);
+
+        if (move)
+        {
+          last_move = *move;
+          printf("Last move: %d\n", last_move);
+
+          // get first digit of last_move to find what space to change
+          while(last_move >= 10)
+            last_move = last_move / 10;
+
+          // from 3 to X or O
+          numbers[last_move-1] = type;
+          print_grid(name1, name2);
+
+          // push it back to first
+          push(&first, *move);
+          printf("Pushed back to first: %d\n", *move);
+        }
+      }
     }
 
     // INVALID MOVEMENT

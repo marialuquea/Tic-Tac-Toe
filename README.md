@@ -24,7 +24,8 @@ $ ./tictactoe
 
 TO DO:
 
-- [ ] Record the history of play
-- [ ] Undo movement
-- [ ] Redo movement
+- [X] Record the history of play
+- [X] Undo movement
+- [X] Redo movement
+- [ ] Computer playing
 - [ ] Report
