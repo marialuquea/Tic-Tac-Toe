@@ -81,6 +81,21 @@ int main()
       player--;
       getch();
     }
+    /*
+    else
+    {
+      /*
+         51 means 5 for choice and 1 for X
+         1 for X
+         2 for O
+         3 for - not played yet
+      ----/
+      int moves_number = concatenate(choice, 1);
+      printf("moves_number: %d\n", moves_number);
+      append(&moves, moves_number);
+      //display(list);
+    }
+    */
 
     result = winner();
     //printf("RESULT: %d\n", result);
@@ -127,16 +142,6 @@ int check_movement(int choice, char type)
     if ((choice + 48) == (int)numbers[i-1])
     {
       numbers[i-1] = type;
-      /*
-         51 means 5 for choice and 1 for X
-         1 for X
-         2 for O
-         3 for - not played yet
-      */
-      int moves_number = concatenate(choice, 1);
-      printf("moves_number: %d\n", moves_number);
-      append(&list, moves_number);
-      //display(list);
       return 1;
     }
   }
