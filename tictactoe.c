@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 // #include <conio.h>
-//#include <curses.h>
+// #include <curses.h>
 
 //#define getch() wgetch(stdscr)
-#define MAX 30
+#define MAX 30 // study this
 
 struct stack
 {
-  int array[MAX]; // study this
+  int array[MAX];
   int top;
 };
 
@@ -18,9 +19,6 @@ void print_grid();
 int winner();
 int check_end();
 int check_movement(int, char);
-
-unsigned concatenate(unsigned, unsigned);
-
 void init_stack(struct stack *);
 void push(struct stack*, int);
 int *pop(struct stack *);
@@ -28,8 +26,6 @@ int *pop(struct stack *);
 int main()
 {
   system("cls");
-  // system("clear");
-  // clear();
 
   struct stack first; // where all moves will go
   struct stack second; // where moves will go if player decis to undo
@@ -41,15 +37,21 @@ int main()
   int result;
   int *move = NULL; // to pop from stack
   int last_move;
-  int player_move;
   char type;
   char name1[20];
-  char name2[20];
+  char name2[20] = "Computer";
+
+  int computer_game;
+  printf("\nChoose number of players:\n\n- 1 to play agains the computer\n- 2 players 1v1\n\nType 1 or 2:\n\n");
+  scanf("%d", &computer_game);
 
   printf("\n Enter Player 1's name: ");
   scanf("%s", name1);
-  printf("\n Enter Player 2's name: ");
-  scanf("%s", name2);
+  if (computer_game == 2) // if 2 players
+  {
+    printf("\n Enter Player 2's name: ");
+    scanf("%s", name2);
+  }
 
   do
   {
@@ -60,26 +62,35 @@ int main()
     if (player == 1) // print name and options
     {
       player = 1;
-      printf("%s choose a number your next move, 10 for undo or 20 for redo: ", name1);
+      printf("%s choose a number your next move, 10 for undo or 20 for redo: \n", name1);
+      scanf("%d", &choice);
     }
     else
     {
       player = 2;
-      printf("%s choose a number your next move, 10 for undo or 20 for redo: ", name2);
+      if (strcmp(name2, "Computer") != 0) // if 2 players
+      {
+        printf("%s choose a number your next move, 10 for undo or 20 for redo: \n", name2);
+        scanf("%d", &choice);
+      }
+      else // if 1 player vs computer
+      {
+        //int randomnumber = rand() % 10;
+        for (int a=1; a<10; a++)
+        {
+          if ((numbers[a-1] != 'X') && (numbers[a-1]) != 'O')
+          {
+            choice = a;
+            break;
+          }
+        }
+      }
     }
-
-    scanf("%d", &choice);
 
     if (player == 1) // set X or O
-    {
       type = 'X';
-      player_move = 1;
-    }
     else //player 2
-    {
       type = 'O';
-      player_move = 2;
-    }
 
     if (choice == 10) // UNDO - pop item from first and push into second
     {
@@ -96,10 +107,6 @@ int main()
         {
           last_move = *move;
           printf("Last move: %d\n", last_move); //31
-
-          // get first digit of last_move to find what space to change
-          while(last_move >= 10)
-            last_move = last_move / 10;
 
           // from X or O to 3
           numbers[last_move-1] = last_move + '0';
@@ -158,9 +165,9 @@ int main()
       */
       if ((choice != 10)&&(choice != 20))
       {
-        int moves_number = concatenate(choice, player_move);
+        int moves_number = choice;
         push(&first, moves_number); // push to first - add move to stack
-        printf("Pushed to first: %d\n", moves_number);
+        //printf("Pushed to first: %d\n", moves_number);
       }
     }
 
@@ -218,17 +225,9 @@ int check_movement(int choice, char type)
   return 0; // invalid
 }
 
-unsigned concatenate(unsigned x, unsigned y)
-{
-    unsigned pow = 10;
-    while(y >= pow)
-        pow *= 10;
-    return x * pow + y;
-}
-
 void print_grid(char *name1, char *name2)
 {
-  //system("cls");
+  system("cls");
 
   printf("\n\n ---- Maria Style Tic Tac Toe ----\n\n");
 
