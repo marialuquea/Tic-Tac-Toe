@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-// #include <conio.h>
-// #include <curses.h>
 
-//#define getch() wgetch(stdscr)
 #define MAX 30 // study this
 
 struct stack
