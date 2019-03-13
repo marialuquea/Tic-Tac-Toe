@@ -36,17 +36,33 @@ int main()
   char name1[20]; // player 1
   char name2[20] = "Computer"; // player 2 or computer
 
+  FILE *file;
+  char buffer[50]; // study this
+
   int computer_game; // multiplayer or against the computer
   printf("\n\n ***********************\n *     TIC TAC TOE     *\n *                     *\n *      by Maria       *\n *      SET08122       *\n ***********************\n");
-  printf("\nChoose number of players:\n\n- 1 to play agains the computer\n- 2 players 1v1\n\nType 1 or 2:\n\n");
+  printf("\nChoose number of players:\n\n- 1 to play agains the computer\n- 2 players 1v1\n- 3 to input an existing game and continue (file must be called test.txt and be in the same folder as the game :) )\n\nType 1, 2 or 3:\n\n");
   scanf("%d", &computer_game);
 
-  printf("\n Enter Player 1's name: ");
-  scanf("%s", name1);
+  if (computer_game == 1 || computer_game == 2)
+  {
+    printf("\n Enter Player 1's name: ");
+    scanf("%s", name1);
+  }
   if (computer_game == 2) // if 2 players
   {
     printf("\n Enter Player 2's name: ");
     scanf("%s", name2);
+  }
+  else if (computer_game == 3){
+
+    printf("CHOICE = 3\n");
+
+    file = fopen("test.txt", "r");
+    fgets(buffer, 50, (FILE*)file);
+    printf("file: %s\n", buffer);
+
+    fclose(file);
   }
 
   do
@@ -140,6 +156,15 @@ int main()
         }
       }
     }
+    else if (choice == 30) // export game to file
+    {
+      printf("WRITING TO A FILE\n");
+      file = fopen("test.txt", "w+");
+      fprintf(file, "Hello\n");
+      fputs("Oh hey\n", file);
+
+      fclose(file);
+    }
     // INVALID MOVEMENT
     else if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
     {
@@ -218,7 +243,7 @@ int check_movement(int choice, char type)
 
 void print_grid(char *name1, char *name2)
 {
-  system("cls");
+  //system("cls");
 
   printf("\n\n\n              |     |     \n");
   printf("           %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
