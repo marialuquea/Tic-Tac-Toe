@@ -16,6 +16,7 @@ int winner();
 int check_end();
 int check_movement(int, char);
 void init_stack(struct stack *);
+void display(struct stack *);
 void push(struct stack*, int);
 int *pop(struct stack *);
 
@@ -145,8 +146,8 @@ int main()
           printf("Last move: %d\n", *move);
 
           // get first digit of last_move to find what space to change
-          while(*move >= 10)
-            *move = *move / 10;
+          //while(*move >= 10)
+            //*move = *move / 10;
 
           // from 3 to X or O
           numbers[*move-1] = type;
@@ -160,7 +161,8 @@ int main()
     {
       printf("WRITING TO A FILE\n");
       file = fopen("test.txt", "w+");
-      fprintf(file, "Hello\n");
+
+      fprintf(file, display(&first));
       fputs("Oh hey\n", file);
 
       fclose(file);
@@ -285,6 +287,20 @@ int check_end()
       return 0;
   }
   return 1;
+}
+
+void display(struct stack *s)
+{
+	int i;
+  int moves[20];
+	if(s->top==-1)
+		printf("\nStack is empty!!");
+	else
+	{
+		printf("\nStack is...\n");
+		for(i=s->top; i>=0; --i)
+			printf(s->array[i]);
+	}
 }
 
 /*
