@@ -11,6 +11,7 @@ struct stack
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+
 void print_grid();
 int winner();
 int check_end();
@@ -116,7 +117,6 @@ int main()
       move = pop(&first); // pop from first
       if (move)
       {
-        printf("Item popped from first: %d\n", *move);
         push(&second, *move); // push into second
 
         // set grid as top in first - pop second, change first X or O for first number, push it back to second
@@ -159,11 +159,17 @@ int main()
     }
     else if (choice == 30) // export game to file
     {
-      printf("WRITING TO A FILE\n");
       file = fopen("test.txt", "w+");
 
-      fprintf(file, display(&first));
-      fputs("Oh hey\n", file);
+      fprintf(file, "first: ");
+
+      for(int i=first.top; i>=0; --i)
+        fprintf(file, "%d", first.array[i]);
+
+      fprintf(file, "\nsecond: ");
+
+      for(int i=second.top; i>=0; --i)
+        fprintf(file, "%d", second.array[i]);
 
       fclose(file);
     }
@@ -292,14 +298,17 @@ int check_end()
 void display(struct stack *s)
 {
 	int i;
-  int moves[20];
 	if(s->top==-1)
-		printf("\nStack is empty!!");
+		printf("Stack is empty\n");
 	else
 	{
 		printf("\nStack is...\n");
 		for(i=s->top; i>=0; --i)
-			printf(s->array[i]);
+    {
+      printf("s->array[i]: %d\n", s->array[i]);
+      //printf("concatenate(moves, s->array[i]): %d\n", concatenate(moves, s->array[i]));
+      //moves = concatenate(moves, s->array[i]);
+    }
 	}
 }
 
