@@ -28,4 +28,6 @@ TO DO:
 - [X] Undo movement
 - [X] Redo movement
 - [X] Computer playing
+- [X] Export game to file
+- [X] Read game from file
 - [ ] Report

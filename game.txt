@@ -1,5 +1,5 @@
-maria
-321
-carmen
-789
+Maria
+78654321
+Computer
+777
 EOF

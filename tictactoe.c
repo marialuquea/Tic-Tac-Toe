@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX 30 // study this
+#define MAX 10 // study this
 
 struct stack
 {
@@ -9,7 +9,6 @@ struct stack
 };
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
 
 void print_grid();
 int winner();
@@ -258,22 +257,22 @@ int winner()
         || (numbers[0] == numbers[4] && numbers[4] == numbers[8]) )
       return 1; // SHOW WINNER
 
-  else if (check_end() == 1){
+  else if (check_end() == 1)
     return 2; // NO WINNER
-  }
 
   else
       return  3; // STILL PLAYING
 }
 
+// check that all spaces have been played
 int check_end()
 {
   for (int i=0; i<9; i++)
   {
     if ((numbers[i] != 'X') && (numbers[i] != 'O'))
-      return 0;
+      return 0; // there are still spaces to play
   }
-  return 1; // no winner
+  return 1; // no spaces left & no winner
 }
 
 /*
