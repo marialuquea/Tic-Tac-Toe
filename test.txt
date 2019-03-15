@@ -1,5 +1,0 @@
-rochi
-754321
-carmen
-89
-EOF
