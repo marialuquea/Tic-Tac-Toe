@@ -61,37 +61,48 @@ int main()
     file = fopen("test.txt", "r");
     fgets(name1, 20, (FILE*)file);    // read first line: name1 (Player 1)
     fgets(buffer, 15, (FILE*)file);   // read first stack (original movements)
-    printf("buffer: %s\n", buffer);
-
+    //printf("buffer: %s\n", buffer);
     reverse_string(buffer);
-    printf("after reverse: %s\n", buffer);
-    printf("strlen(buffer): %d\n", strlen(buffer));
+    //printf("after reverse: %s\n", buffer);
+    //printf("strlen(buffer): %d\n", strlen(buffer));
 
-    /* find buffer length
-    int a;
-    for(a = 0; buffer[a] != '\0'; ++a);
-    int buffer_length = a;
-    printf("first buffer_length: %d\n", buffer_length);
-    */
+    player = player % 2;
+    printf("player outside: %d\n", player);
 
+    // FIRST STACK
     // go through every number in buffer and add to first stack
     for (int i = 1; i < strlen(buffer); i++)
     {
       push(&first, (int)(buffer[i] - '0'));
-      printf("pushed to first: %d\n", (int)(buffer[i] - '0'));
+      //printf("pushed to first: %d\n", (int)(buffer[i] - '0'));
+      player = player % 2;
+      printf("player inside: %d\n", player);
+      if (player == 1){
+        printf("number for player 1 X: %d\n", numbers[((int)(buffer[i] - '0')-1)]);
+        numbers[((int)(buffer[i] - '0')-1)] = 'X';
+      }
+      else if (player == 0){
+        printf("number for player 2 O: %d\n", numbers[((int)(buffer[i] - '0')-1)]);
+        numbers[((int)(buffer[i] - '0')-1)] = 'O';
+      }
+
+      player++;
     }
 
     fgets(name2, 20, (FILE*)file);    // read 3rd line: name2 (Player 2)
     fgets(buffer, 15, (FILE*)file);   // read second stack (undo movements)
-    printf("buffer: %s\n", buffer);
+    //printf("buffer: %s\n", buffer);
+    reverse_string(buffer);
+    //printf("after reverse: %s\n", buffer);
+    //printf("strlen(buffer): %d\n", strlen(buffer));
 
+    // SECOND STACK
     // go through every number in buffer and add to second stack
-    for (int i = 0; i < strlen(buffer); i++)
+    for (int i = 1; i < strlen(buffer); i++)
     {
       push(&second, (int)(buffer[i] - '0'));
-      printf("pushed to second: %d\n", (int)(buffer[i] - '0'));
+      //printf("pushed to second: %d\n", (int)(buffer[i] - '0'));
     }
-
 
     fclose(file);
   }
