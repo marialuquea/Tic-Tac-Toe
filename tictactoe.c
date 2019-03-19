@@ -36,7 +36,7 @@ int main()
   char name1[20]; // player 1
   char name2[20] = "Computer"; // player 2 or computer
 
-  FILE *file;
+  FILE *file; // to save game or open existing game
   char buffer[15]; // study this
 
   int computer_game; // multiplayer or against the computer
@@ -174,10 +174,7 @@ int main()
     else // VALID MOVEMENT - add movement to history of moves
     {
       if ((choice != 10)&&(choice != 20))
-      {
-        int moves_number = choice;
-        push(&first, moves_number); // push to first - add move to stack
-      }
+        push(&first, choice); // push to first - add move to stack
     }
     result = winner();
     player++;
