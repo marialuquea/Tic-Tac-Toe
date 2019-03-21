@@ -91,7 +91,7 @@ int main()
     if (player == 1) // print name and options
     {
       player = 1;
-      printf("%s choose a number for your next move / 10 for undo / 20 for redo / 30 to save game to a file: \n", name1);
+      printf("%s choose a number for your next move: \n", name1);
       scanf("%d", &choice);
     }
     else
@@ -99,7 +99,7 @@ int main()
       player = 2;
       if (strcmp(name2, "Computer") != 0) // if 2 players
       {
-        printf("%s choose a number for your next move / 10 for undo / 20 for redo / 30 to save game to a file: \n", name2);
+        printf("%s choose a number for your next move: \n", name2);
         scanf("%d", &choice);
       }
       else // if 1 player vs computer
@@ -234,12 +234,13 @@ void print_grid(char *name1, char *name2)
 {
   system("cls");
 
-  printf("\n\n\n              |     |     \n");
-  printf("           %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
-  printf("         _____|_____|_____            X: %s\n              |     |     \n", name1);
-  printf("           %c  |  %c  |  %c \n", numbers[3], numbers[4], numbers[5]);
-  printf("         _____|_____|_____            O: %s\n              |     |     \n", name2);
-  printf("           %c  |  %c  |  %c \n              |     |     \n\n\n", numbers[6], numbers[7], numbers[8]);
+  printf("\n\n\n\t     |     |     \n");
+  printf("\t  %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
+  printf("\t_____|_____|_____\tX: %s\n\t     |     |     \n", name1);
+  printf("\t  %c  |  %c  |  %c \n", numbers[3], numbers[4], numbers[5]);
+  printf("\t_____|_____|_____\tO: %s\n\t     |     |     \n", name2);
+  printf("\t  %c  |  %c  |  %c \n\t     |     |     \n\n\n", numbers[6], numbers[7], numbers[8]);
+  printf("  10: undo\t20: redo\t30: save game to a file\n\n\n");
 }
 
 int winner()
