@@ -10,14 +10,17 @@ struct stack
 
 char numbers[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-void print_grid();
+void init_list();
+void save_game(FILE*, char*, char*, struct stack*, struct stack*);
+int check_movement(int, char);
+void print_grid(char*, char*);
+void print_games(char*, char*, int);
 int winner();
 int check_end();
-int check_movement(int, char);
-void init_stack(struct stack *);
+void init_stack(struct stack*);
 void push(struct stack*, int);
-int *pop(struct stack *);
-void reverse_string(char *str);
+int *pop(struct stack*);
+void reverse_string(char*);
 
 int main()
 {
@@ -56,31 +59,98 @@ int main()
   }
   else if (computer_game == 3) // Read game from file
   {
+    printf("\nWhich game do you want to keep playing?\n\n");
+
+    int count = 0;
+    int chosen_game = 0;
+
     file = fopen("game.txt", "r");
-    fgets(name1, 20, (FILE*)file);    // read first line: name1 (Player 1)
-    fgets(buffer, 15, (FILE*)file);   // read first stack (original movements)
-    reverse_string(buffer);
-
-    // FIRST STACK go through every number in buffer and add to first stack
-    for (int i = 1; i < strlen(buffer); i++)
+    do
     {
-      push(&first, (int)(buffer[i] - '0'));
-      player = player % 2; // alternate player to set Xs and Os
-      if (player == 1)
-        numbers[((int)(buffer[i] - '0')-1)] = 'X';
-      else if (player == 0)
-        numbers[((int)(buffer[i] - '0')-1)] = 'O';
-      player++;
+      init_stack(&first);
+      init_stack(&second);
+      player = 1;
+      init_list();
+
+      fgets(name1, 20, (FILE*)file);    // read first line: name1 (Player 1)
+      fgets(buffer, 15, (FILE*)file);   // read first stack (original movements)
+      reverse_string(buffer);
+
+      // FIRST STACK go through every number in buffer and add to first stack
+      for (int i = 1; i < strlen(buffer); i++)
+      {
+        push(&first, (int)(buffer[i] - '0'));
+        player = player % 2; // alternate player to set Xs and Os
+        if (player == 1)
+          numbers[((int)(buffer[i] - '0')-1)] = 'X';
+        else if (player == 0)
+          numbers[((int)(buffer[i] - '0')-1)] = 'O';
+        player++;
+      }
+
+      fgets(name2, 20, (FILE*)file);    // read 3rd line: name2 (Player 2)
+      fgets(buffer, 15, (FILE*)file);   // read second stack (undo movements)
+      reverse_string(buffer);
+
+      // SECOND STACK go through every number in buffer and add to second stack
+      for (int i = 1; i < strlen(buffer); i++)
+        push(&second, (int)(buffer[i] - '0'));
+
+      count++;
+      print_games(name1, name2, count);
     }
+    while (fgets(buffer, 15, (FILE*)file) != NULL);
 
-    fgets(name2, 20, (FILE*)file);    // read 3rd line: name2 (Player 2)
-    fgets(buffer, 15, (FILE*)file);   // read second stack (undo movements)
-    reverse_string(buffer);
-
-    // SECOND STACK go through every number in buffer and add to second stack
-    for (int i = 1; i < strlen(buffer); i++)
-      push(&second, (int)(buffer[i] - '0'));
     fclose(file);
+
+    printf("\n\n Choose the number of the game you want to play: ");
+    scanf("%d", &chosen_game);
+
+    if ((chosen_game > 0) && (chosen_game <= count)) // if chosen game is a valid number
+    {
+      file = fopen("game.txt", "r");
+      count = 0;
+
+      do
+      {
+        init_stack(&first);
+        init_stack(&second);
+        player = 1;
+        init_list();
+
+        fgets(name1, 20, (FILE*)file);    // read first line: name1 (Player 1)
+        fgets(buffer, 15, (FILE*)file);   // read first stack (original movements)
+        reverse_string(buffer);
+
+        // FIRST STACK go through every number in buffer and add to first stack
+        for (int i = 1; i < strlen(buffer); i++)
+        {
+          push(&first, (int)(buffer[i] - '0'));
+          player = player % 2; // alternate player to set Xs and Os
+          if (player == 1)
+            numbers[((int)(buffer[i] - '0')-1)] = 'X';
+          else if (player == 0)
+            numbers[((int)(buffer[i] - '0')-1)] = 'O';
+          player++;
+        }
+
+        fgets(name2, 20, (FILE*)file);    // read 3rd line: name2 (Player 2)
+        fgets(buffer, 15, (FILE*)file);   // read second stack (undo movements)
+        reverse_string(buffer);
+
+        // SECOND STACK go through every number in buffer and add to second stack
+        for (int i = 1; i < strlen(buffer); i++)
+          push(&second, (int)(buffer[i] - '0'));
+
+        count++;
+        fgets(buffer, 5, (FILE*)file);
+      }
+      while (count < chosen_game);
+    }
+    printf("\n\n\nname1, name2: %s %s\n", name1, name2);
+    name1[strlen(name1) - 1] = 0;
+    name2[strlen(name2) - 1] = 0;
+    printf("name1, name2: %s %s\n\n\n\n", name1, name2);
   }
 
   do
@@ -149,23 +219,8 @@ int main()
       }
     }
     else if (choice == 30) // EXPORT GAME TO FILE
-    {
-      file = fopen("game.txt", "w+");
-      fprintf(file, "%s\n", name1);
-
-      for(int i=first.top; i>=0; --i)
-        fprintf(file, "%d", first.array[i]);
-
-      fprintf(file, "\n%s\n", name2);
-
-      for(int i=second.top; i>=0; --i)
-        fprintf(file, "%d", second.array[i]);
-
-      fprintf(file, "\nEOF");
-      fclose(file);
-    }
-    // INVALID MOVEMENT
-    else if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20))
+      save_game(file, name1, name2, &first, &second);
+    else if ((check_movement(choice, type) == 0) && (choice != 10) && (choice != 20)) // INVALID MOVEMENT
     {
       printf("Nah bitch, try again\n");
       player--;
@@ -189,6 +244,8 @@ int main()
       printf("\n    %s won!\n", name1);
     else
       printf("\n    %s won!\n", name2);
+
+    save_game(file, name1, name2, &first, &second);
   }
   else
     printf("\n    --- DRAW!!! ---\n\n");
@@ -196,6 +253,29 @@ int main()
   getch();
 
   return 0;
+}
+
+void init_list()
+{
+  for (int r = 0; r < strlen(numbers); r++)
+    numbers[r] = (r+1)+'0';
+}
+
+void save_game(FILE *file, char *name1, char *name2, struct stack *first, struct stack *second)
+{
+  file = fopen("game.txt", "a");
+  fprintf(file, "\n%s\n", name1);
+
+  for(int i=first->top; i>=0; --i)
+    fprintf(file, "%d", first->array[i]);
+
+  fprintf(file, "\n%s\n", name2);
+
+  for(int i=second->top; i>=0; --i)
+    fprintf(file, "%d", second->array[i]);
+
+  fprintf(file, "\n");
+  fclose(file);
 }
 
 /*
@@ -241,6 +321,17 @@ void print_grid(char *name1, char *name2)
   printf("\t_____|_____|_____\tO: %s\n\t     |     |     \n", name2);
   printf("\t  %c  |  %c  |  %c \n\t     |     |     \n\n\n", numbers[6], numbers[7], numbers[8]);
   printf("  10: undo\t20: redo\t30: save game to a file\n\n\n");
+}
+
+void print_games(char *name1, char *name2, int count)
+{
+  printf("    %d.\n", count);
+  printf("\n\t     |     |     \n");
+  printf("\t  %c  |  %c  |  %c \n", numbers[0], numbers[1], numbers[2]);
+  printf("\t_____|_____|_____\tX: %s\n\t     |     |     \n", name1);
+  printf("\t  %c  |  %c  |  %c \n", numbers[3], numbers[4], numbers[5]);
+  printf("\t_____|_____|_____\tO: %s\n\t     |     |     \n", name2);
+  printf("\t  %c  |  %c  |  %c \n\t     |     |     \n\n\n", numbers[6], numbers[7], numbers[8]);
 }
 
 int winner()
@@ -326,25 +417,20 @@ int *pop(struct stack *s)
 
 void reverse_string(char *str)
 {
-    // skip null
-    if ((str == 0) || (*str == 0))
+    if ((str == 0) || (*str == 0)) // skip null
         return;
 
-    // get range
-    char *start = str;
-    char *end = start + strlen(str) - 1; /* -1 for \0 */
+    char *start = str; // get range
+    char *end = start + strlen(str) - 1; // -1 for \0
     char temp;
 
-    /* reverse */
-    while (end > start)
+    while (end > start) // reverse
     {
-        /* swap */
-        temp = *start;
+        temp = *start; // swap
         *start = *end;
         *end = temp;
 
-        /* move */
-        ++start;
+        ++start; // move
         --end;
     }
 }
