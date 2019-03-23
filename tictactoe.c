@@ -95,7 +95,6 @@ int main()
       // SECOND STACK go through every number in buffer and add to second stack
       for (int i = 1; i < strlen(buffer); i++)
         push(&second, (int)(buffer[i] - '0'));
-
       count++;
       print_games(name1, name2, count);
     }
@@ -147,10 +146,8 @@ int main()
       }
       while (count < chosen_game);
     }
-    printf("\n\n\nname1, name2: %s %s\n", name1, name2);
     name1[strlen(name1) - 1] = 0;
     name2[strlen(name2) - 1] = 0;
-    printf("name1, name2: %s %s\n\n\n\n", name1, name2);
   }
 
   do
