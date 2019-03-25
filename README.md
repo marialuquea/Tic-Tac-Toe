@@ -14,14 +14,6 @@ $ cl tictactoe.c
 $ tictactoe
 ```
 
-in Mac / Linux:
-
-```
-$ gcc -o -lcurses tictactoe tictactoe.c
-
-$ ./tictactoe
-```
-
 TO DO:
 
 - [X] Record the history of play
@@ -30,4 +22,5 @@ TO DO:
 - [X] Computer playing
 - [X] Export game to file
 - [X] Read game from file
-- [ ] Report
+- [X] Display history of games and choose one
+- [X] Report

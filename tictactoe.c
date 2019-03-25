@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX 10 // study this
+#define MAX 9
 
 struct stack
 {
@@ -24,11 +24,11 @@ void reverse_string(char*);
 
 int main()
 {
-  system("cls");
+  system("cls"); // make the screen pretty by getting rid of whatever there was before
 
   struct stack first; // where all moves will go
   struct stack second; // where moves will go if player decides to undo
-  init_stack(&first);
+  init_stack(&first); // set top pointer to -1
   init_stack(&second);
 
   int player = 1; // 1 or 2
@@ -36,13 +36,12 @@ int main()
   int result; // game over or still playing
   int *move = NULL; // to pop from stacks
   char type; // X or O
-  char name1[20]; // player 1
-  char name2[20] = "Computer"; // player 2 or computer
-
+  char name1[15]; // player 1
+  char name2[15] = "Computer"; // player 2 or computer
   FILE *file; // to save game or open existing game
-  char buffer[15]; // study this
-
+  char buffer[9]; // will store the moves saved in stacks in a string format
   int computer_game; // multiplayer or against the computer
+
   printf("\n\n ***********************\n *     TIC TAC TOE     *\n *                     *\n *      by Maria       *\n *      SET08122       *\n ***********************\n");
   printf("\nChoose number of players:\n\n- 1 to play agains the computer\n- 2 players 1v1\n- 3 to input an existing game and continue playing it\n\nType 1, 2 or 3:\n\n");
   scanf("%d", &computer_game);
@@ -67,14 +66,14 @@ int main()
     file = fopen("game.txt", "r");
     do
     {
-      init_stack(&first);
-      init_stack(&second);
-      player = 1;
-      init_list();
+      init_stack(&first);   // needs to be initialised everytime so games don't override each other
+      init_stack(&second);  // same
+      player = 1;           // same
+      init_list();          // same
 
       fgets(name1, 20, (FILE*)file);    // read first line: name1 (Player 1)
       fgets(buffer, 15, (FILE*)file);   // read first stack (original movements)
-      reverse_string(buffer);
+      reverse_string(buffer);           // because of stacks - explained in report
 
       // FIRST STACK go through every number in buffer and add to first stack
       for (int i = 1; i < strlen(buffer); i++)
@@ -90,7 +89,7 @@ int main()
 
       fgets(name2, 20, (FILE*)file);    // read 3rd line: name2 (Player 2)
       fgets(buffer, 15, (FILE*)file);   // read second stack (undo movements)
-      reverse_string(buffer);
+      reverse_string(buffer);           // because stacks
 
       // SECOND STACK go through every number in buffer and add to second stack
       for (int i = 1; i < strlen(buffer); i++)
@@ -98,9 +97,9 @@ int main()
       count++;
       print_games(name1, name2, count);
     }
-    while (fgets(buffer, 15, (FILE*)file) != NULL);
+    while (fgets(buffer, 15, (FILE*)file) != NULL); // until there are no more lines to read
 
-    fclose(file);
+    fclose(file); // always
 
     printf("\n\n Choose the number of the game you want to play: ");
     scanf("%d", &chosen_game);
@@ -252,26 +251,28 @@ int main()
   return 0;
 }
 
+// remove all Xs and Os from paying grid list and set numbers
 void init_list()
 {
   for (int r = 0; r < strlen(numbers); r++)
     numbers[r] = (r+1)+'0';
 }
 
+// save state of game to file
 void save_game(FILE *file, char *name1, char *name2, struct stack *first, struct stack *second)
 {
   file = fopen("game.txt", "a");
-  fprintf(file, "\n%s\n", name1);
+  fprintf(file, "\n%s\n", name1);           // player 1's name
 
   for(int i=first->top; i>=0; --i)
-    fprintf(file, "%d", first->array[i]);
+    fprintf(file, "%d", first->array[i]);   // first stack (original moves)
 
-  fprintf(file, "\n%s\n", name2);
+  fprintf(file, "\n%s\n", name2);           // player 2's name
 
   for(int i=second->top; i>=0; --i)
-    fprintf(file, "%d", second->array[i]);
+    fprintf(file, "%d", second->array[i]);  // second stack (undone moves )
 
-  fprintf(file, "\n");
+  fprintf(file, "\n");                      // another line to separate block
   fclose(file);
 }
 
@@ -370,10 +371,7 @@ void init_stack(struct stack *s)
   s->top = -1;
 }
 
-/*
-  check the position of the variable that indicates the top
-  of the stack
-  */
+// check the position of the variable that indicates the top of the stack
 void push(struct stack *s, int item)
 {
   // if top = max size, taking into account zero indexing
@@ -389,6 +387,7 @@ void push(struct stack *s, int item)
   s->array[s->top] = item;
 }
 
+// remove and return top item of stack
 int *pop(struct stack *s)
 {
   // temprary storage for item to pop
@@ -412,6 +411,7 @@ int *pop(struct stack *s)
   return data;
 }
 
+// because stacks save the moves in a string, the other way around
 void reverse_string(char *str)
 {
     if ((str == 0) || (*str == 0)) // skip null
