@@ -14,13 +14,3 @@ $ cl tictactoe.c
 $ tictactoe
 ```
 
-TO DO:
-
-- [X] Record the history of play
-- [X] Undo movement
-- [X] Redo movement
-- [X] Computer playing
-- [X] Export game to file
-- [X] Read game from file
-- [X] Display history of games and choose one
-- [X] Report
